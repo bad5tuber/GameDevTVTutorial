@@ -8,13 +8,25 @@ public class Mover : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
-        
+        PrintInstructions();
     }
 
     // Update is called once per frame
     void Update()
 
+    {
+        MovePlayer();
+    }
+
+    // Declare method section
+    void PrintInstructions() 
+    {
+        Debug.Log("Welcome to the game.");
+        Debug.Log("Move your player with WASD or arrow keys.");
+        Debug.Log("Dont hit the walls!");
+    }
+
+    void MovePlayer()
     {
         // accessing transform of this game object (becaause we've put this script on our player)
         // . operator -> contained within transform... Unity has a built in method called Translate
@@ -25,4 +37,6 @@ public class Mover : MonoBehaviour
 
         transform.Translate(xValue,0,zValue);
     }
+
+
 }
