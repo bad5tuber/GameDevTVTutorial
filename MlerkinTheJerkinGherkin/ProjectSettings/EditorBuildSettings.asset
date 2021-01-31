@@ -6,9 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Over.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
+    path: Assets/Scenes/Mars.unity
+    guid: ae14843ec473a544a90d2cf84019d00f
   - enabled: 1
+    path: Assets/Scenes/Neptune.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 0
     path: Assets/Scenes/Under.unity
     guid: aa79f405806775f44a638fe4f8976257
+  - enabled: 1
+    path: Assets/Scenes/Jupiter.unity
+    guid: b433e2fcdbdf2544c83146eada7c2c05
   m_configObjects: {}
