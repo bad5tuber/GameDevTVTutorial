@@ -4,55 +4,114 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    
-    Rigidbody rb;
-    AudioSource audioSource;
+    // Parameters - for tuning
+    // Cache - e.g. refrences for readability or speed
+    // State - private instance (member) variables
+
+    // VARIABLES
+    //
+    // Parameters
+
     [SerializeField] float mainThrust = 1000f;
     [SerializeField] float mainRotation = 100f;
 
-    // Start is called before the first frame update
+    // Cache
+
+    [SerializeField] ParticleSystem mainBoostParticles;
+    [SerializeField] ParticleSystem leftBoostParticles;
+    [SerializeField] ParticleSystem rightBoostParticles;
+    [SerializeField] AudioClip mainEngine;
+
+    // State
+
+    Rigidbody rb;
+    AudioSource audioSource;
+
+    // START AND UPDATE METHODS
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         ProcessThrust();
         ProcessRotation();
     }
 
-
+    // PRIVATE GAME METHODS
+    //
+    // Thrusting
     void ProcessThrust()
     {
-        if(Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space))
+            StartThrusting();
+        else
+            StopThrusting();
+    }
+
+    void StartThrusting()
+    {
+        rb.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
+
+        if (!audioSource.isPlaying)
         {
-            rb.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
-            if(!audioSource.isPlaying) 
-            {
-            audioSource.Play();
-            }
-            
+            audioSource.PlayOneShot(mainEngine);
         }
-        else 
+        if (!mainBoostParticles.isPlaying)
         {
-        audioSource.Stop();
+            mainBoostParticles.Play();
         }
     }
 
+    private void StopThrusting()
+    {
+        audioSource.Stop();
+        mainBoostParticles.Stop();
+    }
+
+    // Rotating
+
     void ProcessRotation()
     {
-        if(Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.A))
         {
-            ApplyRotation(mainRotation);
+            StartRotatingLeft();
         }
 
-        else if(Input.GetKey(KeyCode.D))
+        else if (Input.GetKey(KeyCode.D))
         {
-            ApplyRotation(-mainRotation);
+            StartRotatingRight();
         }
+
+        else
+        {
+            StopRotating();
+        }
+    }
+
+    private void StartRotatingLeft()
+    {
+        ApplyRotation(mainRotation);
+        if (!rightBoostParticles.isPlaying)
+        {
+            rightBoostParticles.Play();
+        }
+    }
+    private void StartRotatingRight()
+    {
+        ApplyRotation(-mainRotation);
+        if (!leftBoostParticles.isPlaying)
+        {
+            leftBoostParticles.Play();
+        }
+    }
+    private void StopRotating()
+    {
+        rightBoostParticles.Stop();
+        leftBoostParticles.Stop();
     }
 
     // We've taken an expansive set of code and extracted a method that is being passed
