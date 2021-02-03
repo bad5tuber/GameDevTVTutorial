@@ -595,6 +595,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8898211530504453664, guid: 7ea389e3a0578324d81576f3f38912d6,
+        type: 3}
+      propertyPath: CollisionModule.type
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8945124340258320223, guid: 7ea389e3a0578324d81576f3f38912d6,
         type: 3}
       propertyPath: m_Name
@@ -669,6 +674,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8898211530504453664, guid: 7ea389e3a0578324d81576f3f38912d6,
+        type: 3}
+      propertyPath: CollisionModule.type
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8945124340258320223, guid: 7ea389e3a0578324d81576f3f38912d6,
         type: 3}
