@@ -23,6 +23,11 @@ public class PlayerControls : MonoBehaviour
     [Header("Player input based tuning")]
     [SerializeField] float controlPitchFactor = 10f;
     [SerializeField] float controlRollFactor = 10f;
+    [SerializeField] bool mouseInput = true;
+
+
+    float controlPitch;
+    float controlRoll;
 
 
     [Header("Laser Selection")]
@@ -31,7 +36,8 @@ public class PlayerControls : MonoBehaviour
     // an array of type gameobject
     [SerializeField] GameObject[] lasers;
 
-    float xThrow, yThrow, xYaw, yRoll, fireButton;
+
+    float xThrow, yThrow, xYaw, yRoll, fireButton, xThrowMouse, yThrowMouse;
 
 
     // Update is called once per frame
@@ -47,6 +53,23 @@ public class PlayerControls : MonoBehaviour
         xThrow = Input.GetAxis("Horizontal");
         yThrow = Input.GetAxis("Vertical");
 
+        xThrowMouse = Input.GetAxis("Mouse X");
+        yThrowMouse = Input.GetAxis("Mouse Y");
+
+        if(mouseInput)
+        {        
+        float xOffset = xThrowMouse * Time.deltaTime * movementSpeed;
+        float rawXPos = transform.localPosition.x + xOffset;
+        float clampedXPos = Mathf.Clamp(rawXPos, -xRange, xRange);
+        
+        float yOffset = yThrowMouse * Time.deltaTime * movementSpeed;
+        float rawYPos = transform.localPosition.y + yOffset;
+        float clampedYPos = Mathf.Clamp(rawYPos, -yRange, yRange);
+
+        transform.localPosition = new Vector3(clampedXPos, clampedYPos, transform.localPosition.z);
+        }
+        else
+        {
         float xOffset = xThrow * Time.deltaTime * movementSpeed;
         float rawXPos = transform.localPosition.x + xOffset;
         float clampedXPos = Mathf.Clamp(rawXPos, -xRange, xRange);
@@ -56,10 +79,24 @@ public class PlayerControls : MonoBehaviour
         float clampedYPos = Mathf.Clamp(rawYPos, -yRange, yRange);
 
         transform.localPosition = new Vector3(clampedXPos, clampedYPos, transform.localPosition.z);
+        }        
     }
 
     void ProcessRotation()
     {
+        if(mouseInput)
+        {
+        float pitchDueToPosition = transform.localPosition.y * positionPitchFactor;
+        float pitchDueToControlThrow = yThrowMouse * controlPitchFactor;
+
+        float pitch = pitchDueToPosition + pitchDueToControlThrow;
+        float yaw = transform.localPosition.x * positionYawFactor;
+        float roll = xThrowMouse * controlRollFactor;
+
+        transform.localRotation = Quaternion.Euler(pitch, yaw, roll);
+        }
+        else
+        {
         float pitchDueToPosition = transform.localPosition.y * positionPitchFactor;
         float pitchDueToControlThrow = yThrow * controlPitchFactor;
 
@@ -68,6 +105,7 @@ public class PlayerControls : MonoBehaviour
         float roll = xThrow * controlRollFactor;
 
         transform.localRotation = Quaternion.Euler(pitch, yaw, roll);
+        }
     }
 
     void ProcessFire()

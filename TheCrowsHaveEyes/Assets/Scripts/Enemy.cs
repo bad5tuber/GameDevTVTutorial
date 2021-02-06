@@ -16,20 +16,29 @@ public class Enemy : MonoBehaviour
     // }
     [SerializeField] GameObject deathVFX;
     [SerializeField] GameObject hitVFX;
-    [SerializeField] Transform parent;
-    [SerializeField] int amountToIncrease = 5;
+    [SerializeField] int amountToIncrease = 10;
+    [SerializeField] int hitPoints = 5;
 
-    [SerializeField] int hitPoints = 100;
-    int currentScore;
 
 
     //this is saying that we're creating a variable called scoreboard from the ScoreBoard class
     ScoreBoard scoreBoard;
+    Rigidbody rb;
+    GameObject parentGameObject;
 
-    void Start() 
+    void Start()
     {
         scoreBoard = FindObjectOfType<ScoreBoard>();
+        parentGameObject = GameObject.FindWithTag("SpawnAtRuntime");
+        AddRigidBody(); 
     }
+
+    private void AddRigidBody()
+    {
+        rb = gameObject.AddComponent<Rigidbody>();
+        rb.useGravity = false;
+    }
+
     void OnParticleCollision(GameObject other)
     {
         ProcessHit(other); 
@@ -46,14 +55,15 @@ public class Enemy : MonoBehaviour
         hitPoints -= amountToIncrease;
         Debug.Log(hitPoints);
         GameObject vfx = Instantiate(hitVFX, transform.position, Quaternion.identity);
-        vfx.transform.parent = parent;
+        vfx.transform.parent = parentGameObject.transform;
     }
 
 
     private void KillEnemy()
     {
         GameObject vfx = Instantiate(deathVFX, transform.position, Quaternion.identity);
-        vfx.transform.parent = parent;
+        vfx.transform.parent = parentGameObject.transform;
         Destroy(this.gameObject);
     }
+    
 }
